@@ -1,0 +1,834 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.2" rel="stylesheet" type="text/css">
+
+
+  <meta name="keywords" content="性能优化,">
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.2">
+
+
+
+
+
+
+<meta name="description" content="webpack层面的性能优化">
+<meta name="keywords" content="性能优化">
+<meta property="og:type" content="article">
+<meta property="og:title" content="记一次vue+element+echarts项目的优化（如何轻松将项目性能提升70%）">
+<meta property="og:url" content="http://yoursite.com/2018/05/20/记一次vue+element+echarts项目的优化（webpack向）/index.html">
+<meta property="og:site_name" content="简单   高效    优雅">
+<meta property="og:description" content="webpack层面的性能优化">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://user-gold-cdn.xitu.io/2018/5/19/16378d158576c3d9?w=743&h=278&f=png&s=10398">
+<meta property="og:image" content="https://user-gold-cdn.xitu.io/2018/5/19/16378d00a5128524?w=1912&h=944&f=png&s=245497">
+<meta property="og:image" content="https://user-gold-cdn.xitu.io/2018/5/19/16378ebbef37cd4d?w=734&h=153&f=png&s=14986">
+<meta property="og:image" content="https://user-gold-cdn.xitu.io/2018/5/19/16378e67cd697ebc?w=1898&h=922&f=png&s=400358">
+<meta property="og:image" content="https://user-gold-cdn.xitu.io/2018/5/20/1637921795f1f673?w=555&h=147&f=png&s=15934">
+<meta property="og:image" content="https://user-gold-cdn.xitu.io/2018/5/20/1637926cd1470b76?w=1909&h=933&f=png&s=224576">
+<meta property="og:updated_time" content="2018-11-29T16:12:37.597Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="记一次vue+element+echarts项目的优化（如何轻松将项目性能提升70%）">
+<meta name="twitter:description" content="webpack层面的性能优化">
+<meta name="twitter:image" content="https://user-gold-cdn.xitu.io/2018/5/19/16378d158576c3d9?w=743&h=278&f=png&s=10398">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2018/05/20/记一次vue+element+echarts项目的优化（webpack向）/">
+
+
+
+
+
+  <title>记一次vue+element+echarts项目的优化（如何轻松将项目性能提升70%） | 简单   高效    优雅</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">简单   高效    优雅</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/05/20/记一次vue+element+echarts项目的优化（webpack向）/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="zys">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="https://ss0.bdstatic.com/70cFvHSh_Q1YnxGkpoWK1HF6hhy/it/u=3692774851,1650922953&fm=27&gp=0.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="简单   高效    优雅">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">记一次vue+element+echarts项目的优化（如何轻松将项目性能提升70%）</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-05-20T09:07:08+08:00">
+                2018-05-20
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+              <div class="post-description">
+                  webpack层面的性能优化
+              </div>
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h4 id="注意：本文有点标题党了，图很多很罗嗦，不想看图的同学可以直接看加粗的重点"><a href="#注意：本文有点标题党了，图很多很罗嗦，不想看图的同学可以直接看加粗的重点" class="headerlink" title="注意：本文有点标题党了，图很多很罗嗦，不想看图的同学可以直接看加粗的重点"></a>注意：本文有点标题党了，图很多很罗嗦，不想看图的同学可以直接看<strong>加粗的重点</strong></h4><p> 最近在做一个项目，技术栈为vue全家桶 + element-ui + echarts，打包后发现有1.44M，首屏体验很差。这能忍？果断开始优化。下面说说我是如何将一个打包后<strong>1.44MB</strong>的项目变成打包后只有<strong>0.42MB</strong>，性能提升<strong>70%</strong> 的。</p>
+<h3 id="优化过程"><a href="#优化过程" class="headerlink" title="优化过程"></a>优化过程</h3><ol start="0">
+<li><p>准备：</p>
+<p> <code>vue-cli</code>提供了一个很方便的查看代码打包后体积的命令，只需在正常的打包命令后加一个<code>--report</code>即可，这样打包完成后会自动开启一个页面，展示各个依赖包的大小。</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm run build --report</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>优化前：</p>
+<p> 先看看优化前的大小吧</p>
+<p> <img src="https://user-gold-cdn.xitu.io/2018/5/19/16378d158576c3d9?w=743&amp;h=278&amp;f=png&amp;s=10398" alt=""><br> 这是打包前本地localhost中首屏加载的js文件，只有一个<code>app.js</code> （<code>3.2MB</code>）（注意是本地，未打包，未压缩）</p>
+<p> <img src="https://user-gold-cdn.xitu.io/2018/5/19/16378d00a5128524?w=1912&amp;h=944&amp;f=png&amp;s=245497" alt=""><br> 这是打包后的截图，体积为<code>1.44MB</code>,打包时间为<code>72s</code></p>
+</li>
+</ol>
+<ol start="2">
+<li><p>第一次优化：<strong>路由懒加载</strong></p>
+<p> 说到优化，第一个肯定考虑的是懒加载啦，马上在vue和vue-router的<a href="https://router.vuejs.org/zh-cn/advanced/lazy-loading.html" target="_blank" rel="noopener">官方文档</a>里找到了解决方案</p>
+<blockquote>
+<p>结合 Vue 的异步组件和 Webpack 的代码分割功能，轻松实现路由组件的懒加载</p>
+</blockquote>
+<p> <strong>具体做法</strong>的话如下：</p>
+<p> 首先要安装一个插件<a href="https://babeljs.io/docs/plugins/syntax-dynamic-import/" target="_blank" rel="noopener">Syntax Dynamic Import</a>使项目支持<code>动态import</code></p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cnpm install -S babel-plugin-syntax-dynamic-import</span><br></pre></td></tr></table></figure>
+<p> 然后修改<code>.babelrc</code>文件</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">// .babelrc 中的plugins数组中多加一个&quot;syntax-dynamic-import&quot;</span><br><span class="line">&#123;</span><br><span class="line">  &quot;plugins&quot;: [&quot;syntax-dynamic-import&quot;]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p> 最后修改<code>router.js</code>,将所有路由都改为动态加载</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">//router.js</span><br><span class="line"></span><br><span class="line">//原来的写法：import Home from &apos;@/components/PC/Home&apos;</span><br><span class="line">//改成下面这种形式（其他路由同理）</span><br><span class="line">const Home = () =&gt; import(&apos;@/components/PC/Home&apos;)</span><br></pre></td></tr></table></figure>
+<p> ＯＫ，第一次优化完成。让我们打包看看结果如何吧。<br> <img src="https://user-gold-cdn.xitu.io/2018/5/19/16378ebbef37cd4d?w=734&amp;h=153&amp;f=png&amp;s=14986" alt=""></p>
+<p> <img src="https://user-gold-cdn.xitu.io/2018/5/19/16378e67cd697ebc?w=1898&amp;h=922&amp;f=png&amp;s=400358" alt=""></p>
+</li>
+</ol>
+<pre><code>上面两张图分别是本地打包前首屏加载的js资源（经计算大约为`3.1MB`）的截图和打包后的截图（`1.44MB`），打包时间为
+`55s`。注意我红色框出来的部分，和优化前相比较打包的结果多了几个以`0` `1` 等数字开头的js文件，这其实就是我们的路由文件被分离了出来，首屏只加载了需要的`0.js`和`3.js`文件，等到我们切换到其他路由的时候才会加载其他的`2.js`或者`4.js`，而不是像以前那样全部包含在了`app.js`中一次性全加载出来。
+
+和优化前相比，打包后大小没变，但是打包时间减少了，首屏加载的js资源也少了`0.1MB`（坑爹么不是！！）。
+&gt; 打包体积没变，首屏才少了0.1MB？效果这么差，你特么在逗我？
+
+别着急打我，听我解释。打包体积没变是因为不管路由怎么懒加载，实质上需要的路由文件还是那么多，大小是不变的，所以体积没变。而首屏才少了`0.1MB`，是因为这个项目本来就是个很小的项目，只有4个页面，而且这个项目的首页引入了`echarts`本来就相对来说比较大。
+
+所以说这一步路由懒加载的优化是完全ok的，效果不好是因为是我项目的原因，少了的那`0.1MB`是剩余未加载的路由文件大小。
+
+**如果你的项目有很多个页面，那么路由懒加载的效果应该会不差。**
+
+我们再次看看这个图
+
+![](https://user-gold-cdn.xitu.io/2018/5/19/16379039b034d5b5?w=1917&amp;h=956&amp;f=png&amp;s=269832)
+发现左边黄色的框`echarts`和右边蓝色的框`element-ui`体积占了大头，我们先看`element-ui`占了`556KB`，现在开始针对`element-ui`进行第二次优化
+</code></pre><ol start="3">
+<li><p>第二次优化：<strong>element-ui组件按需加载</strong></p>
+<p> 针对<code>element-ui</code>的优化，没啥好说的，具体做法，直接看<a href="http://element-cn.eleme.io/#/zh-CN/component/quickstart" target="_blank" rel="noopener">文档</a>里面的<strong>按需引入</strong>吧。<br> 照着文档优化了以后，再次打包查看结果：</p>
+</li>
+</ol>
+<pre><code>![](https://user-gold-cdn.xitu.io/2018/5/19/163790a26fe03a00?w=1917&amp;h=940&amp;f=png&amp;s=327523)
+
+这次优化后，打包用了`45s`，总大小由`1.44MB`变成了`1.16MB`
+![](https://user-gold-cdn.xitu.io/2018/5/19/163790aba1332fb3?w=1917&amp;h=949&amp;f=png&amp;s=322877)
+而且`element-ui`模块所占的大小也由`556kb`变成了`267kb`，效果还行。但是这点提升怎么满足的了我？解决了`element-ui`，我们看看另外一个模块`echarts`:
+
+![](https://user-gold-cdn.xitu.io/2018/5/19/16379106a30fd0ac?w=1912&amp;h=959&amp;f=png&amp;s=325545)
+比`element-ui`还要过分！！足足占了`606kb`，马上针对最大的bos----`echarts`进行优化。
+</code></pre><ol start="4">
+<li><p>第三次优化：<strong>使用 CDN 外部加载资源</strong></p>
+<p> 这次优化主要是针对<code>echarts</code>，在其文档里也有提到<a href="http://echarts.baidu.com/tutorial.html#%E5%9C%A8%20webpack%20%E4%B8%AD%E4%BD%BF%E7%94%A8%20ECharts" target="_blank" rel="noopener">按需加载</a>,但是这次我们不用按需加载了，我想把<code>echarts</code>彻底干掉！我们这次要使用<code>webpack</code>的<a href="https://webpack.docschina.org/configuration/externals/" target="_blank" rel="noopener"><strong>externals</strong></a></p>
+<blockquote>
+<p>防止将某些 import 的包(package)打包到 bundle 中，而是在运行时(runtime)再去从外部获取这些扩展依赖(external dependencies)。具有外部依赖(external dependency)的 bundle 可以在各种模块上下文(module context)中使用，例如 CommonJS, AMD, 全局变量和 ES2015 模块。</p>
+</blockquote>
+<p> <strong>具体做法：</strong></p>
+<p> 首先在<code>index.html</code>中引入<code>echarts</code>的外部CDN（如果需要地图组件，也需要一并引入）</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">//index.html</span><br><span class="line">&lt;script src=&quot;https://cdn.bootcss.com/echarts/4.1.0/echarts.min.js&quot;&gt;&lt;/script&gt;</span><br></pre></td></tr></table></figure>
+<p> 然后删除<strong>所有</strong>对<code>echarts</code>的引用的代码，如</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">//删除下面这句代码</span><br><span class="line">import echarts from &apos;echarts&apos;   //或者 const echarts = require(&apos;echarts&apos;)</span><br></pre></td></tr></table></figure>
+<p> 最后在<code>webpack.base.config.js</code>中,做如下改动</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">//webpack.base.config.js   module.exports中增加externals对象</span><br><span class="line">module.exports = &#123;</span><br><span class="line">    externals: &#123;</span><br><span class="line">        &quot;echarts&quot;: &quot;echarts&quot;</span><br><span class="line">    &#125;,</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p> 查看优化结果:</p>
+<p> <img src="https://user-gold-cdn.xitu.io/2018/5/20/1637921795f1f673?w=555&amp;h=147&amp;f=png&amp;s=15934" alt=""><br> 这是打包前的本地首屏加载资源的截图，可算出这次一共加载了<code>1.31MB</code>（没有算上<code>echarts.min.js</code>，因为那是CDN资源）,相对于第一次优化后的<code>3.1MB</code>已经少了很多了。</p>
+<p> 打包后的截图如下</p>
+<p> <img src="https://user-gold-cdn.xitu.io/2018/5/20/1637926cd1470b76?w=1909&amp;h=933&amp;f=png&amp;s=224576" alt=""><br> 可以看到打包后的体积只有<code>434.7KB</code>,而且这次打包只花了<code>34s</code>，最重要的是<code>echarts</code>也真的被干掉了！！</p>
+<p> 惊不惊喜！！意不意外！！</p>
+</li>
+</ol>
+<pre><code>### 各次优化的表格
+
+**懒得看图的同学可以直接看下面这张表格**
+
+  &lt;table&gt;
+    &lt;thead&gt;
+      &lt;tr&gt;
+        &lt;th&gt;#&lt;/th&gt;
+        &lt;th&gt;打包后体积&lt;/th&gt;
+        &lt;th&gt;压缩后体积&lt;/th&gt;
+        &lt;th&gt;首屏js资源&lt;/th&gt;
+        &lt;th&gt;打包耗时&lt;/th&gt;
+      &lt;/tr&gt;
+    &lt;/thead&gt;
+    &lt;tbody&gt;
+      &lt;tr&gt;
+        &lt;td&gt;优化前&lt;/td&gt;
+        &lt;td&gt;1.44M&lt;/td&gt;
+        &lt;td&gt;425K&lt;/td&gt;
+        &lt;td&gt;3.2M&lt;/td&gt;
+        &lt;td&gt;72s&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+        &lt;td&gt;第一次优化（路由懒加载）&lt;/td&gt;
+        &lt;td&gt;1.44M&lt;/td&gt;
+        &lt;td&gt;434K&lt;/td&gt;
+        &lt;td&gt;3.11M&lt;/td&gt;
+        &lt;td&gt;55s&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+        &lt;td&gt;第二次优化（element-ui按需加载）&lt;/td&gt;
+        &lt;td&gt;1.16M&lt;/td&gt;
+        &lt;td&gt;381K&lt;/td&gt;
+        &lt;td&gt;1.3M&lt;/td&gt;
+        &lt;td&gt;45s&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+        &lt;td&gt;第三次优化（引入外部CDN）&lt;/td&gt;
+        &lt;td&gt; 434K&lt;/td&gt;
+        &lt;td&gt; 121K&lt;/td&gt;
+        &lt;td&gt;1.3M&lt;/td&gt;
+        &lt;td&gt;34s&lt;/td&gt;
+      &lt;/tr&gt;
+    &lt;/tbody&gt;
+  &lt;/table&gt;
+
+
+可以看出，我们的优化还是很有成效的，各种体积和打包耗时差不多减少了**70%** 左右。
+
+### 总结
+
+**这部分一定要看啊啊啊**
+
+
+* 遇到webpack打包性能问题，先去`npm run build --report`，然后根据分析结果来做相应的优化，谁占体积大就干谁
+* 路由很多的复杂页面，**路由懒加载**是肯定要做的
+* 现在很多库都有提供**按需加载**的功能，有需要的话可以按照官方文档的做法来按需加载
+* webpack提供的`externals`可以配合**外部资源CDN**轻松大幅度减少打包体积，尤其对于`echarts`、`jQuery`、`lodash`这种库来说
+* 千万不要忘了开启**Gzip**压缩
+* 本文讲的只是针对于`webpack`层面的优化，性能优化不只这些，还有其他方面的优化，比如[**页面渲染优化（减少重排）**](http://aizys.win/2017/12/17/%E5%89%8D%E7%AB%AF%E6%80%A7%E8%83%BD%E4%B9%8B%E9%A1%B5%E9%9D%A2%E6%B8%B2%E6%9F%93%E4%BC%98%E5%8C%96/)、[**网络加载优化**](http://aizys.win/2017/12/14/%E5%89%8D%E7%AB%AF%E6%80%A7%E8%83%BD%E4%B9%8B%E7%BD%91%E7%BB%9C%E5%8A%A0%E8%BD%BD%E4%BC%98%E5%8C%96/)等。
+</code></pre>
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/性能优化/" rel="tag"># 性能优化</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/03/20/一次性渲染十万条数据/" rel="next" title="一次性渲染十万条数据">
+                <i class="fa fa-chevron-left"></i> 一次性渲染十万条数据
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/11/30/记一次阿里云服务器上前后端分离项目的搭建（vue+express）/" rel="prev" title="记一次阿里云服务器上前后端分离项目的搭建（vue+express）">
+                记一次阿里云服务器上前后端分离项目的搭建（vue+express） <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image" src="https://ss0.bdstatic.com/70cFvHSh_Q1YnxGkpoWK1HF6hhy/it/u=3692774851,1650922953&fm=27&gp=0.jpg" alt="zys">
+          <p class="site-author-name" itemprop="name">zys</p>
+           
+              <p class="site-description motion-element" itemprop="description"></p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">32</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">10</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#注意：本文有点标题党了，图很多很罗嗦，不想看图的同学可以直接看加粗的重点"><span class="nav-number">1.</span> <span class="nav-text">注意：本文有点标题党了，图很多很罗嗦，不想看图的同学可以直接看加粗的重点</span></a></li></ol><li class="nav-item nav-level-3"><a class="nav-link" href="#优化过程"><span class="nav-number"></span> <span class="nav-text">优化过程</span></a></li></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">zys</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Gemini
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.2"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.2"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+  <script type="text/javascript" src="/js/src/js.cookie.js?v=5.1.2"></script>
+  <script type="text/javascript" src="/js/src/scroll-cookie.js?v=5.1.2"></script>
+
+
+  
+
+</body>
+</html>

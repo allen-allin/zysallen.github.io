@@ -1,0 +1,702 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.2" rel="stylesheet" type="text/css">
+
+
+  <meta name="keywords" content="总结记录,">
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.2">
+
+
+
+
+
+
+<meta name="description" content="最近工作中遇到了固定表头的需求，现将网上的资料和自己想到的办法整理一下">
+<meta name="keywords" content="总结记录">
+<meta property="og:type" content="article">
+<meta property="og:title" content="固定表头的几种方式">
+<meta property="og:url" content="http://yoursite.com/2017/08/05/固定表头的几种方式/index.html">
+<meta property="og:site_name" content="简单   高效    优雅">
+<meta property="og:description" content="最近工作中遇到了固定表头的需求，现将网上的资料和自己想到的办法整理一下">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2018-11-29T16:12:37.593Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="固定表头的几种方式">
+<meta name="twitter:description" content="最近工作中遇到了固定表头的需求，现将网上的资料和自己想到的办法整理一下">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2017/08/05/固定表头的几种方式/">
+
+
+
+
+
+  <title>固定表头的几种方式 | 简单   高效    优雅</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">简单   高效    优雅</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/08/05/固定表头的几种方式/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="zys">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="https://ss0.bdstatic.com/70cFvHSh_Q1YnxGkpoWK1HF6hhy/it/u=3692774851,1650922953&fm=27&gp=0.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="简单   高效    优雅">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">固定表头的几种方式</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-08-05T14:20:49+08:00">
+                2017-08-05
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+              <div class="post-description">
+                  最近工作中遇到了固定表头的需求，现将网上的资料和自己想到的办法整理一下
+              </div>
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>最近工作中遇到了固定表头的需求，现将网上的资料和自己想到的办法整理如下。有这样几种方法：</p>
+<h4 id="1-两个table元素"><a href="#1-两个table元素" class="headerlink" title="1. 两个table元素"></a>1. 两个table元素</h4><p>这也是网上通用的一个解决方案，原理就是用两个<code>table</code>元素，一个用来显示表头，另外一个用来显示表身。给显示表身的容器设定高度和<code>overflow: auto</code>，这样可以实现表头固定表身滚动。这个时候问题来了，由于表头和表身的两个表格是独立的，所以它们单元格的宽度不能保持一直，这个时候需要用到<code>&lt;col&gt;&lt;/col&gt;</code>标签来统一每列的宽度。</p>
+<p>具体实现可以参考司徒正美大神的这篇文章  <a href="http://www.cnblogs.com/rubylouvre/archive/2010/03/06/1679381.html" target="_blank" rel="noopener">http://www.cnblogs.com/rubylouvre/archive/2010/03/06/1679381.html</a></p>
+<p>这种实现的优点是纯css实现，简单易理解；<br>缺点也很明显：只适合表格列数已知且单元格定宽的情况；更要命的是，当列数太多出现横向滚动条时，此时横向滚动表身时表头并不会跟着一起滚动，所以就有了下面的第二种解决方案。</p>
+<h4 id="2-利用表头父元素的scrollTo方法实现"><a href="#2-利用表头父元素的scrollTo方法实现" class="headerlink" title="2. 利用表头父元素的scrollTo方法实现"></a>2. 利用表头父元素的scrollTo方法实现</h4><p>准备工作和上一个方法差不多，不同的是负责显示表头的那个<code>table</code>需要一个父元素把它包起来并且设置<code>overflow: hidden</code>，这样的目的是让该元素可以使用<code>scrollTo()</code>方法，因为只有有滚动条件的元素才能用<code>scrollTo</code>方法（即子元素的宽高超过了该元素，不一定要overflow为auto或者scroll）。当负责显示表身的元素滚动时，会产生一个<code>scrollLeft</code>,这个时候调用表头容器的<code>scrollTo(scrollLeft,0)</code>方法即可。需要注意的是，当横向滚动到最右边时，表头会向左偏移一个滚动条的距离，这个时候还需要用<code>transform</code>让表头的容器再向左偏移同样的距离就好。说起来很绕口，直接看代码吧</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">//html</span><br><span class="line"><span class="tag">&lt;<span class="name">div</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">div</span> <span class="attr">id</span>=<span class="string">"theadWrapper"</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">table</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">thead</span>&gt;</span></span><br><span class="line">                    <span class="tag">&lt;<span class="name">tr</span>&gt;</span></span><br><span class="line">                        <span class="tag">&lt;<span class="name">th</span>&gt;</span><span class="comment">&lt;!-- 省略单元格 --&gt;</span><span class="tag">&lt;/<span class="name">th</span>&gt;</span></span><br><span class="line">                    <span class="tag">&lt;/<span class="name">tr</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;/<span class="name">thead</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;/<span class="name">table</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"></span><br><span class="line">        <span class="tag">&lt;<span class="name">div</span> <span class="attr">id</span>=<span class="string">"tbodyWrapper"</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">table</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">tbody</span>&gt;</span></span><br><span class="line">                    <span class="tag">&lt;<span class="name">tr</span>&gt;</span></span><br><span class="line">                        <span class="tag">&lt;<span class="name">td</span>&gt;</span><span class="comment">&lt;!-- 省略单元格 --&gt;</span><span class="tag">&lt;/<span class="name">td</span>&gt;</span></span><br><span class="line">                    <span class="tag">&lt;/<span class="name">tr</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;/<span class="name">tbody</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;/<span class="name">table</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">//css</span><br><span class="line"><span class="selector-id">#theadWrapper</span> &#123;</span><br><span class="line">    width: 100%;        //表头容器的宽度要和表身容器的宽度一样，这里都设为它们父元素的100%</span><br><span class="line">    overflow: hidden;   //可以使用scrollTo方法，且不会出现滚动条</span><br><span class="line">&#125;</span><br><span class="line"><span class="selector-id">#tbodyWrapper</span> &#123;</span><br><span class="line">    <span class="attribute">width</span>: <span class="number">100%</span>;</span><br><span class="line">    overflow: auto;     //控制出现滚动条</span><br><span class="line">&#125;</span><br><span class="line">...//单元格定宽的代码此处省略</span><br></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//js</span></span><br><span class="line">tbodyWrapper.addEventListener(<span class="string">'scroll'</span>,<span class="function"><span class="keyword">function</span>(<span class="params">e</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">let</span> el = e.target</span><br><span class="line">    <span class="keyword">let</span> scrollLeft = el.scrollLeft</span><br><span class="line">    theadWrapper.scrollTo(scrollLeft, <span class="number">0</span>)</span><br><span class="line"></span><br><span class="line">    <span class="comment">//对滚动到最右边时表头向左偏移一个滚动条距离的处理</span></span><br><span class="line">    <span class="keyword">let</span> scrllBarWidth = el.scrollWidth - el.offsetWidth - scrollLeft <span class="comment">//表头偏移的距离，当这个值不大于0时说明滚动到最右边了</span></span><br><span class="line">    theadWrapper.style.transform = <span class="string">`translateX( <span class="subst">$&#123;scrWidth &lt;= <span class="number">0</span> ? scrollBarWidth : <span class="number">0</span>&#125;</span>px)`</span></span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+<p>该方法的优点： 解决了上一个方法中表头和表身不能同时横向滚动的问题，数据量大的时候也不会卡顿<br>缺点： 代码较繁琐，需要用js控制；单元格必须定宽；</p>
+<h4 id="3-利用css3的transform实现"><a href="#3-利用css3的transform实现" class="headerlink" title="3. 利用css3的transform实现"></a>3. 利用css3的transform实现</h4><p>原理：当表格的父元素滚动若干距离时，让表头同时偏移同样的距离。这里采用<code>transform</code>，而不是<code>top</code>是因为，<code>transform</code>不会造成页面的重排，性能上要好很多。</p>
+<p>伪代码：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//tableContainer表示表格的父元素，thead表示表头</span></span><br><span class="line">tableContainer.addEventListener(<span class="string">'scroll'</span>,<span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    thead.style.transform = <span class="string">`translateY(<span class="subst">$&#123;<span class="keyword">this</span>.scrollTop&#125;</span>px)`</span></span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure></p>
+<p>这种方式的优点：易于理解，并且即使单元格不是定宽（自适应）也可以；<br>缺点： 不是纯css实现，需要js配合；由于使用了css3，所以兼容性不好；并且即使用到了transform，当数据量过大时也会有一定的卡顿，影响体验，只适合表格数据不大的情况。</p>
+<h4 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h4><p>当数据量大时选择方法2；<br>当单元格必须自适应宽度时选择方法3；<br>当数据量又大，单元格又必须自适应时…拿把刀去找产品讲道理吧（误</p>
+<h6 id="占坑-等待大神给出完美解决方案"><a href="#占坑-等待大神给出完美解决方案" class="headerlink" title="占坑   等待大神给出完美解决方案"></a>占坑   等待大神给出完美解决方案</h6>
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/总结记录/" rel="tag"># 总结记录</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/06/10/基于axios+promise的能统一捕获错误的ajax封装/" rel="next" title="基于axios+promise的能统一捕获错误的ajax封装">
+                <i class="fa fa-chevron-left"></i> 基于axios+promise的能统一捕获错误的ajax封装
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/08/26/如何判断某元素是否有滚动条/" rel="prev" title="判断DOM元素是否有滚动条">
+                判断DOM元素是否有滚动条 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image" src="https://ss0.bdstatic.com/70cFvHSh_Q1YnxGkpoWK1HF6hhy/it/u=3692774851,1650922953&fm=27&gp=0.jpg" alt="zys">
+          <p class="site-author-name" itemprop="name">zys</p>
+           
+              <p class="site-description motion-element" itemprop="description"></p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">32</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">10</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-两个table元素"><span class="nav-number">1.</span> <span class="nav-text">1. 两个table元素</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-利用表头父元素的scrollTo方法实现"><span class="nav-number">2.</span> <span class="nav-text">2. 利用表头父元素的scrollTo方法实现</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-利用css3的transform实现"><span class="nav-number">3.</span> <span class="nav-text">3. 利用css3的transform实现</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#总结"><span class="nav-number">4.</span> <span class="nav-text">总结</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#占坑-等待大神给出完美解决方案"><span class="nav-number">4.0.1.</span> <span class="nav-text">占坑   等待大神给出完美解决方案</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">zys</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Gemini
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.2"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.2"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+  <script type="text/javascript" src="/js/src/js.cookie.js?v=5.1.2"></script>
+  <script type="text/javascript" src="/js/src/scroll-cookie.js?v=5.1.2"></script>
+
+
+  
+
+</body>
+</html>
