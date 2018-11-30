@@ -260,6 +260,161 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/12/01/基于gitlab ci的前端持续集成/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="zys">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="https://ss0.bdstatic.com/70cFvHSh_Q1YnxGkpoWK1HF6hhy/it/u=3692774851,1650922953&fm=27&gp=0.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="简单   高效    优雅">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/12/01/基于gitlab ci的前端持续集成/" itemprop="url">基于gitlab ci的前端持续集成/持续部署（CI/CD）</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-12-01T11:07:08+08:00">
+                2018-12-01
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h4 id="什么是持续集成-持续部署（CI-CD）？"><a href="#什么是持续集成-持续部署（CI-CD）？" class="headerlink" title="什么是持续集成/持续部署（CI/CD）？"></a>什么是持续集成/持续部署（CI/CD）？</h4><p>个人理解，说白了就是把代码测试、打包、发布等工作交给一些工具来自动完成。这样可以提高效率，减少失误，开发人员只需要关心开发和提交代码到<code>git</code>就可以了。</p>
+<h4 id="怎么做？"><a href="#怎么做？" class="headerlink" title="怎么做？"></a>怎么做？</h4><ul>
+<li>方式一： 使用<code>web hooks</code>,这种方式的原理就是在<code>gitlab</code>项目的<code>Setting-Integrations</code>设置中增加一个请求<code>url</code>和一个<code>secret</code>，如下图<br><img src="https://user-gold-cdn.xitu.io/2018/12/1/1676572b0b918f22?w=1782&amp;h=954&amp;f=png&amp;s=122760" alt=""><br>当触发钩子条件时，（一般是<code>git push</code>之后），<code>gitlab</code>会主动把<code>secret</code>带在请求头中去请求前面的<code>url</code>，后端服务接受到这个请求后并验证<code>secret</code>后，就可以为所欲为啦。这种方式不需要配置持续集成工具，但是需要自己单独专门写一个后端服务。由于今天主要使用下面的方式二，所以方式一的具体做法就不展开了，可以参考<a href="https://www.jianshu.com/p/d0d601af3797" target="_blank" rel="noopener">Gitlab Webhooks自动化部署实战</a></li>
+<li><p>方式二： 使用工具如<code>gitlab-CI</code>,这种方式的原理就是在自己的服务器上注册<code>gitlab-runner</code>时，会有一个<code>token</code>，服务器上运行<code>gitlab-runner</code>后，<code>runner</code>会轮询的发送带<code>token</code>的<code>http</code>请求给<code>gitlab</code>,如果<code>gitlab</code>有任务了，（一般是<code>git push</code>），那么会把任务信息返回给<code>runner</code>，然后<code>runner</code>就开始调用注册时选的<code>Executor</code>（我是用的<code>shell</code>）来执行项目根目录下的配置文件<code>.gitlab-ci.yml</code>，执行后把结果反馈给<code>gitlab</code>。详细的工作原理请移步<a href="https://tech.upyun.com/article/245/%E5%BD%93%E8%B0%88%E5%88%B0%20GitLab%20CI%20%E7%9A%84%E6%97%B6%E5%80%99%EF%BC%8C%E6%88%91%E4%BB%AC%E8%AF%A5%E8%81%8A%E4%BA%9B%E4%BB%80%E4%B9%88%EF%BC%88%E4%B8%8A%E7%AF%87%EF%BC%89.html" target="_blank" rel="noopener">当谈到 GitLab CI 的时候，我们该聊些什么</a>。下面说说我个人的使用步骤：</p>
+<ol>
+<li><p>在开发环境（如自己的windows上）开发前端项目（该项目我命名为<code>ci-test</code>），并推送到<code>gitlab</code>远程仓库中。这里是用<code>vue-cli 3.0</code>生成的<code>vue</code>项目，我个人习惯增加如下自定义配置</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">//vue.config.js</span><br><span class="line">module.exports = &#123;</span><br><span class="line">    outputDir: &apos;app-page&apos;,          //自定义打包后的目录名，注意在.gitnore文件中也要忽略掉该目录</span><br><span class="line">    baseUrl: &apos;./&apos;                   //打包时使用相对路径</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>服务器上配置<code>nginx</code>，并配置默认访问目录，例如我自己的配置是<code>/app</code>文件夹。具体做法请自行搜索。</p>
+</li>
+<li>安装<code>node</code>和<code>git</code>，并在<code>/app</code>目录下克隆<code>gitlab</code>仓库中的代码，这时候服务器上就存在<code>/app/ci-test</code>目录了</li>
+<li>服务器上安装<code>gitlab-runner</code>，具体方法请参考<a href="https://docs.gitlab.com/runner/install/" target="_blank" rel="noopener">官方文档</a></li>
+<li><p>服务器上注册一个<code>Runner</code>,具体方法参考<a href="https://docs.gitlab.com/runner/register/index.html" target="_blank" rel="noopener">官方文档</a>,注意这里要填的<code>url(一般是 https://gitlab.com)</code>和<code>token</code>，都在<code>gitlab</code>项目下的<code>setting-CD/CD-Runners-Specific Runners</code>里面找(如下图)，</p>
+<p> <img src="https://user-gold-cdn.xitu.io/2018/12/1/1676560365798880?w=1739&amp;h=936&amp;f=png&amp;s=141865" alt=""><br> 而且要填的<code>tags</code>也是有用的，后面的<code>.gitlab-ci.yml</code>里面的<code>tag</code>选项必须是这里的<code>tags</code>里面的子项，最后<code>executor</code>这里我是填的<code>shell</code></p>
+</li>
+<li><p>注册后修改<code>gitlab-runner</code>的权限</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sudo chown -R gitlab-runner:gitlab-runner /home/gitlab-runner</span><br><span class="line">sudo chmod -R 777 /home/gitlab-runner</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>开启<code>gitlab-runner</code>服务</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">gitlab-runner run</span><br></pre></td></tr></table></figure>
+<p> 成功的话，会有一个绿点，如下图<br> <img src="https://user-gold-cdn.xitu.io/2018/12/1/1676562384f17f9f?w=1817&amp;h=939&amp;f=png&amp;s=142855" alt=""></p>
+</li>
+<li><p>在<code>vue</code>项目根目录下配置<code>.gitlab-ci.yml</code>文件，具体配置选项请看<a href="https://docs.gitlab.com/ce/ci/yaml/README.html" target="_blank" rel="noopener">文档</a>。我的配置如下：</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line">#当Runner通过轮询检测到gitlab上有任务时，就会执行这个文件</span><br><span class="line">#个人不是很熟yml的语法以及详细配置，都是找猫画虎的，求各位大神提出优化意见</span><br><span class="line"></span><br><span class="line">stages:</span><br><span class="line">    - update</span><br><span class="line">    - test</span><br><span class="line">    - build</span><br><span class="line"></span><br><span class="line">#更新代码并且安装依赖</span><br><span class="line">update:     </span><br><span class="line">    stage: update</span><br><span class="line">    script:</span><br><span class="line">        - cd /app/ci-test       #先进入到项目目录下，下面同理</span><br><span class="line">        - git pull</span><br><span class="line">        - sudo npm install</span><br><span class="line">    tags:                       #这里的tags一定要属于注册时填的tags中，下面同理</span><br><span class="line">        - update</span><br><span class="line"></span><br><span class="line">#执行单元测试</span><br><span class="line">test:</span><br><span class="line">    stage: test</span><br><span class="line">    script:</span><br><span class="line">        - cd /app/ci-test</span><br><span class="line">        - npm run test:unit</span><br><span class="line">    tags:</span><br><span class="line">        - unitTest</span><br><span class="line"></span><br><span class="line">#打包</span><br><span class="line">build:</span><br><span class="line">    stage: build</span><br><span class="line">    script:</span><br><span class="line">        - cd /app/ci-test</span><br><span class="line">        - npm run build</span><br><span class="line">    tags: </span><br><span class="line">        - build</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>将<code>.gitlab-ci.yml</code>文件推送到<code>gitlab</code>仓库中，在<code>gitlab</code>项目页面中打开<code>CI/CD-Pipelines</code>，即可看到效果，如下图</p>
+<p> <img src="https://user-gold-cdn.xitu.io/2018/12/1/16765648b16d549c?w=1826&amp;h=896&amp;f=png&amp;s=145348" alt=""><br> <code>status</code>那一列如果是绿色的<code>passed</code>则说明大功告成，以后每次只需要提交代码即可，再也不用手动测试部署了。这个时候去浏览器中打开相应的地址，就可以看到部署成功。我的是这样的：<br> <img src="https://user-gold-cdn.xitu.io/2018/12/1/1676569b2de26bc1?w=1919&amp;h=1000&amp;f=png&amp;s=64030" alt=""><br> 如果是红色的<code>failed</code>则说明执行某一个命令的时候出错了，这时候就会收到一封邮件告知失败原因。</p>
+</li>
+</ol>
+</li>
+</ul>
+<h4 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h4><ul>
+<li><a href="https://www.jianshu.com/p/705428ca1410" target="_blank" rel="noopener">基于Gitlab CI搭建持续集成环境</a></li>
+<li><a href="https://www.jianshu.com/p/d0d601af3797" target="_blank" rel="noopener">Gitlab Webhooks自动化部署实战</a></li>
+<li><a href="https://tech.upyun.com/article/245/%E5%BD%93%E8%B0%88%E5%88%B0%20GitLab%20CI%20%E7%9A%84%E6%97%B6%E5%80%99%EF%BC%8C%E6%88%91%E4%BB%AC%E8%AF%A5%E8%81%8A%E4%BA%9B%E4%BB%80%E4%B9%88%EF%BC%88%E4%B8%8A%E7%AF%87%EF%BC%89.html" target="_blank" rel="noopener">当谈到 GitLab CI 的时候，我们该聊些什么</a></li>
+</ul>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/11/30/记一次阿里云服务器上前后端分离项目的搭建（vue+express）/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
@@ -675,130 +830,6 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/03/07/从React到vue：类比法学React/">
-
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="zys">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="https://ss0.bdstatic.com/70cFvHSh_Q1YnxGkpoWK1HF6hhy/it/u=3692774851,1650922953&fm=27&gp=0.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="简单   高效    优雅">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/03/07/从React到vue：类比法学React/" itemprop="url">从Vue到React：类比法学React</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-03-07T13:07:08+08:00">
-                2018-03-07
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          通过比较vue和React的相似点和不同点来更好的学习React
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2018/03/07/从React到vue：类比法学React/">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/03/07/react-easy-watcher/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
@@ -958,7 +989,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/">
-                <span class="site-state-item-count">32</span>
+                <span class="site-state-item-count">33</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -971,7 +1002,7 @@
             
             <div class="site-state-item site-state-tags">
               <a href="/tags/index.html">
-                <span class="site-state-item-count">10</span>
+                <span class="site-state-item-count">11</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>
